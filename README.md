@@ -1,7 +1,9 @@
-# For CasparHealth
+# The Code Challenge 
 
- * This needs AWS Credentials in "default" profile mode and this AWS Credentials becomes default admin using system:masters group membership
+### Objectives Status
+1. Create EKS Cluster: Completed earlier
+2. Migrate Boiler Plate Code: Completed today!
+3. Use Github Actions as CI Pipeline: Pending
+   * Trying to learn more about Github Actions
 
- * Used Null_Resource LocalProvisioner to  run "aws update-kubeconfig" command to append Clusterconfig to kubeconfig
-
- * aws_auth configmap not part of this , can be done later
+Please go through respective README for each task.
