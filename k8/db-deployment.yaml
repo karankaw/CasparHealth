@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: db      # Labels for Deployment Object itself
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: db    # Labels which help to find matching pods
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: db  # Labels to be applied to new PODS
+    spec:
+      containers:
+        - env:                              # Refactor to Secrets Object
+            - name: POSTGRES_PASSWORD
+              value: password
+          image: postgres:12.8
+          name: db
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - name: api-db
+              mountPath: /var/lib/postgresql/data  # Default Path for PostgreSQL
+      restartPolicy: Always
+      volumes:
+        - name: api-db    
+          persistentVolumeClaim:
+            claimName: db-pvc       # PVC details are mentioned in separate .YAML file
+            

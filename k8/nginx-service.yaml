@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    io.kompose.service: nginx
+spec:
+  ports:
+  - name: "nginx-port"
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP             # Explicitly made this ClusterIP as I am in minikube ...
+  selector:                   # ... Should Ideally be "LoadBalancer" or "Nodeport" as its outward facing
+    io.kompose.service: nginx # Labels/Selector to find matching Pods

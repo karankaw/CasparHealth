@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis                     # Will add Labels later
+spec:
+  type: ClusterIP                 # Explicitly mapped as ClusterIp as its backend
+  selector:
+    app.kubernetes.io/name: redis
+  ports:
+  - name: redis-port
+    protocol: TCP
+    port: 6379
+    targetPort: redis-pod-port    # Used Named-Port from "Redis Pod" Container instead of port number
+  

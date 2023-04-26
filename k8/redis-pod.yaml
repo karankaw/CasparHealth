@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/name: redis
+    environment: dev                # Just added 1 Extra Label assuming DEV env
+spec:
+  containers:
+  - name: redis
+    image: redis:7.0.8
+    imagePullPolicy: IfNotPresent   # Wanted to save Network Roundtrip and Use cache instead
+    ports:
+      - containerPort: 6379
+        name: redis-pod-port        # Wanted to show an example here, This is referred in Service.yaml

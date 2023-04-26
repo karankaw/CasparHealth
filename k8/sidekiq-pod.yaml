@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod    # Init-Container or Job can also be used, Deployment seemed to be overkill
+metadata:    # Need to dive deep into Ruby/Rails(Sidekiq)
+  name: sidekiq
+  labels:
+    io.kompose.service: sidekiq
+spec:
+  containers:
+  - name: ror
+    image: code-challenge-011-api
+    imagePullPolicy: Never #Trying to fetch it from "minikube image build/load or eval $(minikube docker-env)":
+    resources: {}
+    command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
+    env:                  # Refactor to ConfigMap
+    - name: DB_HOST
+      value: db
+    - name: DB_PASS       # Refactor to Secrets Object
+      value: password
+    - name: DB_USER
+      value: postgres
+    - name: REDIS_URL
+      value: redis://redis:6379/1
+    volumeMounts:
+    - name: minikube-mount
+      mountPath: /app
+  restartPolicy: Always
+  volumes:
+  - name: minikube-mount
+    hostPath:
+      path: /home/docker/api # Path where I mounted Actual Boilerplate-Code in Minikube(Minikube Hack!)
+      type: Directory

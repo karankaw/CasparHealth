@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: db
+  name: db
+spec:
+  type: ClusterIP           # Always better to be explicit
+  ports:                    # DB and BackendAPI are usually - Internal Facing , hence ClusterIP
+    - name: postgresdb-port
+      port: 5432
+      targetPort: 5432
+  selector:
+    io.kompose.service: db

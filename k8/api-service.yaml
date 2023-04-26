@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: api 
+  name: api
+spec:
+  type: ClusterIP           # Always good practice to be explicit than implicit
+  ports:
+    - name: "ror-port"
+      port: 3000
+      targetPort: 3000
+  selector:
+    io.kompose.service: api # This should be matching with POD labels

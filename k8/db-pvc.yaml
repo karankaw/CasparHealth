@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc            # Can add Labels later, More Labels is always good
+spec:
+  accessModes:
+    - ReadWriteOnce       # This is single node Minikube Cluster - So its mounted on 1 Node
+  resources:
+    requests:             # Minikube has "Default" Storage Class
+      storage: 100Mi      # Dynamic Provisioner creates matching "PV" in "immediate" binding mode

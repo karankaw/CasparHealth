@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: spa                 # I had used "kompose convert" to generate initial shim and then customised it
+  name: spa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: spa
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: spa               # Ideally More Labels are for beter Visibilty/Management
+    spec:
+      containers:
+        - name: spa
+          image: code-challenge-011-spa:latest # Download from Local Built Images in Minikube or from private registry uploaded image
+          imagePullPolicy: Never     
+          ports:
+            - containerPort: 4000
+          resources: {}
+          # volumeMounts:                     # "spa" Folder is already baked into Image!, Could be redundant
+          # - name: minikube-spa-mount
+          #   mountPath: /app
+          # - name: spa-claim                 # node_modules Already baked in Image!,Could be redundant
+          #   mountPath: /app/node_modules
+      restartPolicy: Always
+      # volumes:
+      # - name: minikube-spa-mount
+      #   hostPath:
+      #     path: /home/docker/spa
+      #     type: Directory
+      # - name: spa-claim             
+      #   persistentVolumeClaim:
+      #     claimName: spa-npm-pvc

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: spa # Labels for Service Itself
+  name: spa
+spec:
+  ports:
+    - name: "spa-port"
+      port: 4000
+      targetPort: 4000
+  type: ClusterIP           # Best Practice to mention it explicitly
+  selector:
+    io.kompose.service: spa # Labels to find Service-Endpoints/Pods
