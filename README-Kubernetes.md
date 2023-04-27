@@ -17,11 +17,11 @@
   * Could have made that `NodePort/LoadBalancer` as well.
 - I have used Kompose on existing code, just to get some skeleton code/shims and then refactored it.
 - Please go through my inline Comments in YAML for more insights.
-- I have used Secrets and populated them as ENV
+- I have used Secrets(BASE64 Encoded) and Congigmap and populated them as ENV
   * Ideally, We should Mount Secrets as Volume (Will need to change code too) or use ```Vault``` 'Azure KeyVault' or 'AWS Secrets Manager'
 - PersistentVolume for DB - I have used PVC and Minikube had a Default Storage Class which dynamically created PV for me.
 - "spa" service has 2 Volumes in Docker-Compose, but they are already baked in Image, So I did not added any volume "spa"
-
+- Created Kubernetes Job to run *rake* tasks for intial Database Bootstrapping 
 
 ### Notes
 - ```Minikube``` should be installed
