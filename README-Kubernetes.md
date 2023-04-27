@@ -8,13 +8,15 @@
 ### Design Choices
 - `Github URL` : https://github.com/karankaw/CasparHealth
 - *Tools Used* : Minikube, Kompose(Optional), Kubectl, Git
-- I have built and used images locally inside minikube itself
+- I have built and used images locally inside minikube itself.
 	* Docker Images are not uploaded to Private Repo - Could have done that too.
-- I mounted Hostpath also via minikube
+- Its a a best practice to have resources scoped to a K8 namespace, but I have used 'default' namespace, so as to be closer to provided boilerplate code
+- Both'api' and 'spa' services have hostFiles baked in them. Still, I chose to deliberately include 'Hostpath' Volume for API just to show that we can do it that way too.
+  * I mounted Hostpath also via minikube `minikube mount`
 - I have kept all Services as ClusterIP for keeping it simple and exposed it using kubectl port-forward* or ``` minikube service --url```
-  * Could have made that `NodePort/LoadBalancer` as well
-- I have used Kompose on existing code, just to get some skeleton code/shims and then refactored it
-- Please go through my inline Comments in YAML for more insights
+  * Could have made that `NodePort/LoadBalancer` as well.
+- I have used Kompose on existing code, just to get some skeleton code/shims and then refactored it.
+- Please go through my inline Comments in YAML for more insights.
 - I have used Secrets and populated them as ENV
   * Ideally, We should Mount Secrets as Volume (Will need to change code too) or use ```Vault``` 'Azure KeyVault' or 'AWS Secrets Manager'
 - PersistentVolume for DB - I have used PVC and Minikube had a Default Storage Class which dynamically created PV for me.
@@ -41,10 +43,11 @@
 
 ___
 ### DockerCompose Kubectl Migration Steps
-* **Use kompose convert** : (Optional)This gives us intial skeleton yamls and then we refactor them.
-* **Build Images** : Using `minikube build` so that we can use images Locally without pull
-* **Create Mounts** : Using `minikube mount` because Minikube does not allow directl HostPath Upload for Volume
+* **Use kompose convert** : (Optional)This gives us intial skeleton yamls and then we refactor them comparing docker-compose.yml
+* **Point Docker CLI to Minikube's DockerEngine** : So that we can use images Locally without pull
+* **Create Mounts** : Using `minikube mount` for 'api' hostpath Volume
 * **Apply Kubernetes Manifest** : from k8 folder
+* **Run Kubernetes Job** for Database Migration *rake* commands
 * **port-forward** : Forward K8 Services using `k8 port-forward` or `minikube service` so that we can test URLs
 
 *RUN Steps (To be Automated soon in Github Actions)*

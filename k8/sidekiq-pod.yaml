@@ -6,20 +6,20 @@ metadata:    # Need to dive deep into Ruby/Rails(Sidekiq)
     io.kompose.service: sidekiq
 spec:
   containers:
-  - name: ror
-    image: code-challenge-011-api
+  - name: sidekiq
+    image: code-challenge-011-sidekiq
     imagePullPolicy: Never #Trying to fetch it from "minikube image build/load or eval $(minikube docker-env)":
     resources: {}
     command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
-    env:                  # Refactor to ConfigMap
-    - name: DB_HOST
-      value: db
-    - name: DB_PASS       # Refactor to Secrets Object
-      value: password
-    - name: DB_USER
-      value: postgres
-    - name: REDIS_URL
-      value: redis://redis:6379/1
+    envFrom:
+    - configMapRef:
+        name: env-cfg
+    env:
+    - name: DB_PASS
+      valueFrom:
+        secretKeyRef:
+          name: secrets-vault
+          key: postgresdb-password
     volumeMounts:
     - name: minikube-mount
       mountPath: /app

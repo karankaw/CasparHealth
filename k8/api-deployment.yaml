@@ -23,19 +23,21 @@ spec:
           ports:
           - containerPort: 3000
           resources: {}
-          command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+          command: ["/bin/bash"]
+          args: ["-c", "rm -f /app/tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"] 
+          envFrom:
+          - configMapRef:
+              name: env-cfg
           env:
-          - name: DB_HOST       # Refactor to ConfigMap
-            value: db
           - name: DB_PASS
-            value: password     # Refactor to Secrets Object
-          - name: DB_USER
-            value: postgres
-          - name: REDIS_URL
-            value: redis://redis:6379/1
+            valueFrom:
+              secretKeyRef:
+                name: secrets-vault
+                key: postgresdb-password
           volumeMounts:
           - name: minikube-api-mount
             mountPath: /app
+      # initContainers:
       restartPolicy: Always     # What can Replication do, if Pod fails
       volumes:
       - name: minikube-api-mount

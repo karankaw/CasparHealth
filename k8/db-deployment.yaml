@@ -17,14 +17,17 @@ spec:
         io.kompose.service: db  # Labels to be applied to new PODS
     spec:
       containers:
-        - env:                              # Refactor to Secrets Object
-            - name: POSTGRES_PASSWORD
-              value: password
+        - name: db
           image: postgres:12.8
-          name: db
           ports:
-            - containerPort: 5432
+          - containerPort: 5432
           resources: {}
+          env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secrets-vault
+                key: postgresdb-password
           volumeMounts:
             - name: api-db
               mountPath: /var/lib/postgresql/data  # Default Path for PostgreSQL

@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rake-dbjob
+spec:
+  template:
+    metadata:
+      name: rake-dbjob
+    spec:
+      containers:
+      - name: ror-job
+        image: code-challenge-011-api
+        imagePullPolicy: Never  # Download from Local Built Images in Minikube or from private registry uploaded image
+        ports:
+        - containerPort: 3000
+        resources: {}
+        command: ["/bin/bash"]
+        args: ["-c", "bin/rake db:setup && bin/rake db:migrate"]
+        envFrom:
+        - configMapRef:
+            name: env-cfg
+        env:
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: secrets-vault
+              key: postgresdb-password
+        volumeMounts:
+        - name: minikube-api-mount
+          mountPath: /app
+      restartPolicy: Never     # What can Replication do, if Pod fails
+      volumes:
+      - name: minikube-api-mount
+        hostPath:
+          path: /home/docker/api  # Path where I mounted Actual Boilerplate-Code in Minikube(Minikube Hack!)
+          type: Directory
