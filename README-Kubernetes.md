@@ -101,3 +101,8 @@ minikube delete
 ```
 
 Please Refer Screenshots of my work
+- [AllK8ResourcesRunning.png](https://github.com/karankaw/CasparHealth/blob/main/misc/KubernetesALLResourcesRunning.png)
+- [Nginx-UI-Homepaghe.png](https://github.com/karankaw/CasparHealth/blob/main/misc/Nginx-Minikube-Portforwarding.png)
+- [ROR-API-Homepage.png](https://github.com/karankaw/CasparHealth/blob/main/misc/ROR-Minikube-PortForwarding.png)
+
+THANK YOU !
