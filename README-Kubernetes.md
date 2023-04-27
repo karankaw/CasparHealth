@@ -1,10 +1,13 @@
 ### N.B.
 - I know this README File is a bit longer than usual, but just wanted to express my intents/choices/tradeoff more clearly here, please pardon me.
+- [Design Choices](#design-choices)
+- [Notes](#notes)
+- [Miscellaneous](#miscellaneous)
+- [DockerCompose Kubectl Migration Steps](#dockercompose-kubectl-migration-steps)
 
-
-### Important Information (Design Choices)
-- `Github URL`: https://github.com/karankaw/CasparHealth
-- *Tools*: Minikube, Kompose(Optional), Kubectl, Git
+### Design Choices
+- `Github URL` : https://github.com/karankaw/CasparHealth
+- *Tools Used* : Minikube, Kompose(Optional), Kubectl, Git
 - I have built and used images locally inside minikube itself
 	* Docker Images are not uploaded to Private Repo - Could have done that too.
 - I mounted Hostpath also via minikube
@@ -36,8 +39,15 @@
 - I learned to write good Markdown while doing this coding assignment
 - My next course of action could be automate steps mention below in "Github Actions", Need to learn "Github Actions"
 
+___
+### DockerCompose Kubectl Migration Steps
+* **Use kompose convert** : (Optional)This gives us intial skeleton yamls and then we refactor them.
+* **Build Images** : Using `minikube build` so that we can use images Locally without pull
+* **Create Mounts** : Using `minikube mount` because Minikube does not allow directl HostPath Upload for Volume
+* **Apply Kubernetes Manifest** : from k8 folder
+* **port-forward** : Forward K8 Services using `k8 port-forward` or `minikube service` so that we can test URLs
 
-### *Steps to Convert to Kubernetes from Docker :*
+*RUN Steps (To be Automated soon in Github Actions)*
+```shell
 
-1. 
-
+```
