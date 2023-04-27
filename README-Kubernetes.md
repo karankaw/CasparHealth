@@ -19,7 +19,7 @@
 - Please go through my inline Comments in YAML for more insights.
 - I have used Secrets(BASE64 Encoded) and Congigmap and populated them as ENV
   * Ideally, We should Mount Secrets as Volume (Will need to change code too) or use ```Vault``` 'Azure KeyVault' or 'AWS Secrets Manager'
-- PersistentVolume for DB - I have used PVC and Minikube had a Default Storage Class which dynamically created PV for me.
+- PersistentVolume for PostgresDB - I have used PVC and Minikube had a Default Storage Class which dynamically created PV for me.
 - "spa" service has 2 Volumes in Docker-Compose, but they are already baked in Image, So I did not added any volume "spa"
 - Created Kubernetes Job to run *rake* tasks for intial Database Bootstrapping 
 
@@ -35,6 +35,7 @@
 - I am able to get "Welcome to RAILS" Homepage as well for 'api' service
 - I am able to get "Video Library" Homepage as well for 'spa' service
   * My Kubernetes App also shows same behaviour that "Category" dropdown shows in DockerCompose as mentioned earlier above and it also does not get populated and video cannot be submiited.
+- `sidekiq` is same as `api` docker image, but I still kept them separately tagged.
 
 
 ### Miscellaneous 
@@ -52,5 +53,51 @@ ___
 
 *RUN Steps (To be Automated soon in Github Actions)*
 ```shell
+git clone https://github.com/karankaw/CasparHealth
+cd CasparHealth
+minikube status # Minikube should be running
+kubectl config current-context # Kubectl should be pointing to minikube
 
+minikube mount code-challenge-0.1.1/api/:/home/docker/api # Keep this bash Shell Running
+
+# Open New Bash Shell/Tab to 'CasparHealth' folder
+minikube ssh  # Get In Minikube Host/Node
+pwd           # Should show /home/docker
+ls            # Should list 'api' Folder
+ls api        # Should list files and directories
+
+# Open New Bash Shell/Tab to 'CasparHealth' folder
+eval $(minikube docker-env)
+echo $DOCKER_HOST   # ENV Variable Should be set
+
+cd code-challenge-0.1.1
+docker build . -t code-challenge-011-api:latest -f Dockerfile.rails  
+docker build . -t code-challenge-011-sidekiq:latest -f Dockerfile.rails  # sidekiq is same as api image
+docker build . -t code-challenge-011-spa:latest -f Dockerfile.react
+docker build . -t code-challenge-011-nginx:latest -f Dockerfile.nginx
+docker image ls     # Should show images including above 3, we just built
+
+cd ../k8
+kubectl apply -f . # Wait sometime for changes to take effect
+
+kubectl get all
+kubectl get pv
+kubectl get pvc
+kubectl get secrets
+kubectl get cm
+
+#kubectl port-forward svc/api 8080:3000    # My Defined port could be running elsewhere
+#kubectl port-forward svc/nginx 8082:8000  # So using minikube service
+
+# Open New Bash Shell/Tab 
+minikube service api --url
+
+
+# Open New Bash Shell/Tab 
+minikube service nginx --url
+
+#When done completely, You can destroy minikube
+minikube delete
 ```
+
+Please Refer Screenshots of my work
